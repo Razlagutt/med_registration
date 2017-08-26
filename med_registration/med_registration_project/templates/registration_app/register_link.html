@@ -1,0 +1,19 @@
+{% block register %}
+
+{% if is_logged %}
+<li class="nav-item active">
+    <a class="nav-link" href="">{{ username }}</a>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" href="{% url 'registration:user_logout' %}">Выйти</a>
+</li>
+{% else %}
+<li class="nav-item active">
+    <a class="nav-link" href="{% url 'registration:user_register' %}">Регистрация</a>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" href=""></a>
+</li>
+{% endif %}
+
+{% endblock %}

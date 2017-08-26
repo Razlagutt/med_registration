@@ -1,0 +1,30 @@
+{% extends 'registration_app/base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <form class="" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <div class="form-group"> <label>Имя</label>
+              {{ user_form.first_name }}
+            </div>
+            <div class="form-group"> <label>Фамилия</label>
+              {{ user_form.last_name }}
+            </div>
+            <div class="form-group"> <label>Логин</label>
+              {{ user_form.username }}
+            </div>
+            <div class="form-group"> <label>Пароль</label>
+              {{ user_form.password }}
+            </div>
+            <input class="btn btn-primary" type="submit" value="Зарегистрироваться">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,6 +1,15 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.urls import reverse
 
 # Create your models here.
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+
+    def __str__(self):
+        return self.user.username
 
 
 class Specialty(models.Model):
@@ -15,7 +24,7 @@ class Specialty(models.Model):
 
 
 class Doctors(models.Model):
-    specialty = models.ForeignKey(Specialty, on_delete=models.CASCADE)
+    specialty = models.ForeignKey(Specialty, verbose_name='Специальность', on_delete=models.CASCADE)
     full_name = models.CharField(max_length=50, verbose_name='ФИО')
 
     class Meta:
@@ -33,7 +42,7 @@ class Schedule(models.Model):
     pub_date = models.DateTimeField(max_length=15, verbose_name='Дата')
 
     def __str__(self):
-        return 'График'
+        return self.client
 
     class Meta:
         verbose_name = 'График'

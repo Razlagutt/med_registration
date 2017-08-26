@@ -1,0 +1,33 @@
+{% extends 'registration_app/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+  <div class="py-5 text-center">
+    <div class="container">
+      <div class="row">
+        <!--Начало цикла-->
+        {% for spec in specialty %}
+        <div class="col-md-4">
+          <div class="card my-1">
+            <div class="card-block text-center">
+              <h1 class="card-title">{{ spec.title }}</h1>
+            </div>
+            <!--Начало подцикла-->
+            <ul class="list-group list-group-flush">
+              {% for doctor in doctors %}
+              {% if spec.id == doctor.specialty_id %}
+              <li class="list-group-item"><i class="fa fa-fw fa-user-md"></i>
+                <a class="card-link" href="{{ doctor.id }}">{{ doctor.full_name }}</a>
+              </li>
+              {% endif %}
+              {% endfor %}
+            </ul>
+            <!--Конец подцикла-->
+          </div>
+        </div>
+        {% endfor %}
+        <!--Конец цикла-->
+      </div>
+    </div>
+  </div>
+{% endblock %}

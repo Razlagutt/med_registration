@@ -1,0 +1,31 @@
+{% extends 'registration_app/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="col-md-12">
+            <img src="https://pingendo.com/assets/photos/user_placeholder.png" class="d-block mx-auto rounded-circle img-fluid my-3">
+            <h3 class="text-center">{{ doctor.full_name }}</h3>
+            <p class="text-center">{{ doctor.specialty }}</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="py-5 section">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                  <p class="lead">Клиент: {{ client }}</p>
+                  <p class="lead">Дата: {{ record_date }}</p>
+                  <p class="lead">Время: {{ record_time }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

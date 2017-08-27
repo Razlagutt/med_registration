@@ -1,7 +1,5 @@
 from django.contrib import admin
-from .models import Specialty, Doctors, Schedule, UserProfile
-
-# Register your models here.
+from .models import Specialty, Doctors, Schedule
 
 
 class ScheduleAdmin(admin.ModelAdmin):
@@ -14,4 +12,3 @@ class ScheduleAdmin(admin.ModelAdmin):
 admin.site.register(Specialty)
 admin.site.register(Doctors)
 admin.site.register(Schedule, ScheduleAdmin)
-admin.site.register(UserProfile)

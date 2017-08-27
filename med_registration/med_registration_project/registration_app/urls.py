@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^logout/$', views.user_logout, name='user_logout'),
     url(r'^doctors/$', views.doctors_list, name='doctors'),
     url(r'^doctors/(?P<id>\d+)/$', views.schedule, name='schedule'),
+    url(r'^doctors/(?P<id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<hour>\w+)/$', views.record_list, name='record_list'),
 ]

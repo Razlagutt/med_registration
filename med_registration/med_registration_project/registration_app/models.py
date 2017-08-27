@@ -1,15 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.urls import reverse
-
-# Create your models here.
-
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
-
-    def __str__(self):
-        return self.user.username
 
 
 class Specialty(models.Model):
@@ -45,5 +35,5 @@ class Schedule(models.Model):
         return self.client
 
     class Meta:
-        verbose_name = 'График'
+        verbose_name = 'Запись'
         verbose_name_plural = 'График'

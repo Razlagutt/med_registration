@@ -2,13 +2,13 @@ from django.conf.urls import url
 from . import views
 
 
-app_name = 'registration_app'
+app_name = 'registration'
 
 urlpatterns = [
-    url(r'^login/$', views.user_login, name='user_login'),
+    url(r'^$', views.user_login, name='user_login'),
     url(r'^registration/$', views.user_register, name='user_register'),
     url(r'^logout/$', views.user_logout, name='user_logout'),
-    url(r'^doctors/$', views.doctors_list, name='doctors'),
+    url(r'^doctors/$', views.doctors, name='doctors'),
     url(r'^doctors/(?P<id>\d+)/$', views.schedule, name='schedule'),
-    url(r'^doctors/(?P<id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<hour>\w+)/$', views.record_list, name='record_list'),
+    url(r'^doctors/(?P<id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<hour>\w+)/$', views.record, name='record_list'),
 ]

@@ -11,7 +11,7 @@
 <body class="">
   <nav class="navbar navbar-expand-md text-center navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" {% if user.is_authenticated %}href="/doctors/"{% else %}href="/login/"{% endif %}>Поликлинника</a>
+      <a class="navbar-brand" {% if user.is_authenticated %}href="{% url 'registration:doctors' %}"{% else %}href="{% url 'registration:user_login' %}"{% endif %}>Поликлинника</a>
       <div class="text-center justify-content-center" id="navbar2SupportedContent">
         <ul class="navbar-nav">
           <li class="nav-item active">

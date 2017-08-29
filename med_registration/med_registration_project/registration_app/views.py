@@ -11,46 +11,37 @@ from datetime import time, datetime as dt
 def get_datetime(args):
 
     # Блок получающий актуальные даты текущего месяца
-    dates = Calendar(0).itermonthdates(dt.today().year, dt.today().month)
-    NOW = dt.today().date()
-    actual_dates = [date for date in dates if date >= NOW]
+    NOW = dt.today()
+    dates = Calendar(0).itermonthdates(NOW.year, NOW.month)
+    actual_dates = [date for date in dates if not (dt.isoweekday(date) in [6, 7]) and date >= NOW.date()]
 
     WORK_DATES = []
-    WORK_TIME = [time(t, 00) for t in range(9, 19)]
-    for ac_date in actual_dates:
+    WORK_TIME = [time(hour, 0) for hour in range(9, 19)]
+    for actual_date in actual_dates:
         for work_hour in WORK_TIME:
-            WORK_DATES.append(dt.combine(ac_date, work_hour))
+            WORK_DATES.append(dt.combine(actual_date, work_hour))
 
-    # Извлекаем из queryset данные. Не понимаю почему, но через for не хочет работать, требует целочисленный индекс у args
-    i = 0
-    qs_dates = []
-    while i < len(args):
-        qs_dates.append(dt.combine(dt.date(args[i]['pub_date']), dt.time(args[i]['pub_date'])))
-        i += 1
+    # Извлекаем из queryset данные date, time. Не понимаю почему, но через for не хочет работать (хотя иногда работает),
+    # требует целочисленный индекс у arg
+    qs_dates = [dt.combine(dt.date(arg['pub_date']), dt.time(arg['pub_date'])) for arg in args]
 
     # Получаем список свободных дней и часов для записи к врачу
     [WORK_DATES.remove(work_date) for work_date in WORK_DATES if work_date in qs_dates]
 
-    # Сериализуем данные в два списка: 1) отсортированный список дат; 2) отсортированный список времени
-    # Сортируем список по времени
-    work_days = sorted(set([dt.date(work_date) for work_date in WORK_DATES]))
+    # Сортируем список рабочих дат по возрастанию
+    work_days = sorted({dt.date(work_date) for work_date in WORK_DATES})
 
-    # Создаем словарь дата: [время]
+    # Создаем словарь дата: [время] свободных для записи к врачу
     DATES_DICT = {}
-    buff_lst = []
+    time_list = []
     for work_day in work_days:
         for work_date in WORK_DATES:
             if work_day == dt.date(work_date):
-                buff_lst.append(dt.time(work_date).hour)
-        DATES_DICT[work_day] = buff_lst
-        buff_lst = []
+                time_list.append(dt.time(work_date).hour)
+        DATES_DICT[work_day] = time_list
+        time_list = []
 
-    # Разбиваем словарь на два списка и возвращаем все в datetime_list + словарь дата: время
-    date_list = sorted(list(DATES_DICT.keys()))
-    time_list = []
-    for i in date_list:
-        time_list.append(DATES_DICT[i])
-    return [date_list, time_list, DATES_DICT]
+    return [work_days, DATES_DICT]
 
 
 def schedule(request, id=None):
@@ -60,8 +51,7 @@ def schedule(request, id=None):
         datetime_list = get_datetime(schedule_query)
         context = {
             'work_dates': datetime_list[0],
-            'work_times': datetime_list[1],
-            'dates_dict': datetime_list[2],
+            'dates_dict': datetime_list[1],
             'doctor': get_object_or_404(Doctors, id=id),
             'btn_state': 'Выйти',
             'url_state': reverse('registration:user_logout'),
@@ -72,7 +62,7 @@ def schedule(request, id=None):
         return redirect('registration:user_login')
 
 
-def record_list(request, id, year, month, day, hour):
+def record(request, id, year, month, day, hour):
     if request.user.is_authenticated():
         str_date = '{}/{}/{} {}:00'.format(year, month, day, hour)
         format_str = "%Y/%m/%d %H:%M"
@@ -85,18 +75,18 @@ def record_list(request, id, year, month, day, hour):
             'url_state': reverse('registration:user_logout'),
             'title_page': 'Лист записи',
         }
-        record = Schedule(client=context['client'],
+        record_list = Schedule(client=context['client'],
                           pub_date=dt.combine(context['record_date'], context['record_time']),
                           doctor=context['doctor'],
                           specialty=context['doctor'].specialty
                           )
-        record.save()
-        return render(request, 'registration_app/record_list.html', context)
+        record_list.save()
+        return render(request, 'registration_app/record.html', context)
     else:
         return redirect('registration:user_login')
 
 
-def doctors_list(request):
+def doctors(request):
     if request.user.is_authenticated():
         context = {
             'doctors': Doctors.objects.all().order_by('specialty'),
@@ -105,7 +95,7 @@ def doctors_list(request):
             'url_state': reverse('registration:user_logout'),
             'title_page': 'Специалисты клиники',
         }
-        return render(request, 'registration_app/doctors_list.html', context)
+        return render(request, 'registration_app/doctors.html', context)
     return redirect('registration:user_login')
 
 

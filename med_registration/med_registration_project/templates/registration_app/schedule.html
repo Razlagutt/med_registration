@@ -18,7 +18,7 @@
               {% for key, value in dates_dict.items %}
               {% if key == work_day %}
               {% for work_time in value %}
-              <a class="dropdown-item" href="{{ work_day|date:'Y/m/d/' }}{{ work_time }}">{{ work_time }}:00</a>
+              <a class="dropdown-item" href="{% url 'registration:record_list' id=doctor.id year=work_day|date:'Y' month=work_day|date:'m' day=work_day|date:'d' hour=work_time %}">{{ work_time }}:00</a>
               {% endfor %}
               {% endif %}
               {% endfor %}

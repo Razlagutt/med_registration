@@ -28,7 +28,7 @@ class Schedule(models.Model):
     specialty = models.ForeignKey(Specialty, verbose_name='Специальность', on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctors, verbose_name='Врач', on_delete=models.CASCADE)
     client = models.CharField(max_length=255, verbose_name='Посетитель')
-    pub_date = models.DateTimeField(max_length=15, verbose_name='Дата')
+    pub_date = models.DateTimeField(max_length=15, verbose_name='Дата', blank='True')
 
     def __str__(self):
         return self.client

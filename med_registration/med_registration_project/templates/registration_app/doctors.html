@@ -16,8 +16,8 @@
             <ul class="list-group list-group-flush">
               {% for doctor in doctors %}
               {% if spec.id == doctor.specialty_id %}
-              <li class="list-group-item"><i class="fa fa-fw fa-user-md"></i>
-                <a class="card-link" href="{{ doctor.id }}">{{ doctor.full_name }}</a>
+              <li class="list-group-item"><i class="fa fa-fw fa-user-md" aria-hidden="false"></i>
+                <a class="card-link" href="{% url 'registration:schedule' doctor.id %}">{{ doctor.full_name }}</a>
               </li>
               {% endif %}
               {% endfor %}

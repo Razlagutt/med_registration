@@ -9,6 +9,6 @@ urlpatterns = [
     url(r'^registration/$', views.user_register, name='user_register'),
     url(r'^logout/$', views.user_logout, name='user_logout'),
     url(r'^doctors/$', views.doctors, name='doctors'),
-    url(r'^doctors/(?P<id>\d+)/$', views.schedule, name='schedule'),
-    url(r'^doctors/(?P<id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<hour>\w+)/$', views.record, name='record_list'),
+    url(r'^(?P<id>\d+)/$', views.schedule, name='schedule'),
+    url(r'^(?P<id>\d+)/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<hour>\d+)/$', views.record, name='record_list'),
 ]

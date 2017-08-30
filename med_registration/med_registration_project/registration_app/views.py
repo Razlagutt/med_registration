@@ -41,20 +41,20 @@ def get_datetime(args):
         DATES_DICT[work_day] = time_list
         time_list = []
 
-    return [work_days, DATES_DICT]
+    return {'work_dates': work_days, 'dates_dict': DATES_DICT}
 
 
-def schedule(request, id=None):
+def schedule(request, id):
     if request.user.is_authenticated():
         current_date = dt.combine(dt.today().date(), time(0, 0))
         schedule_query = Schedule.objects.filter(doctor__id=id, pub_date__gte=current_date).order_by('pub_date').values()
         datetime_list = get_datetime(schedule_query)
         context = {
-            'work_dates': datetime_list[0],
-            'dates_dict': datetime_list[1],
+            'work_dates': datetime_list['work_dates'],
+            'dates_dict': datetime_list['dates_dict'],
             'doctor': get_object_or_404(Doctors, id=id),
-            'btn_state': 'Выйти',
-            'url_state': reverse('registration:user_logout'),
+            'btn_title': 'Выйти',
+            'url_btn': reverse('registration:user_logout'),
             'title_page': 'Расписание приема посетителей',
         }
         return render(request, 'registration_app/schedule.html', context)
@@ -71,8 +71,8 @@ def record(request, id, year, month, day, hour):
             'doctor': get_object_or_404(Doctors, id=id),
             'record_date': dt.strptime(str_date, format_str).date(),
             'record_time': dt.strptime(str_date, format_str).time(),
-            'btn_state': 'Выйти',
-            'url_state': reverse('registration:user_logout'),
+            'btn_title': 'Выйти',
+            'url_btn': reverse('registration:user_logout'),
             'title_page': 'Лист записи',
         }
         record_list = Schedule(client=context['client'],
@@ -91,8 +91,8 @@ def doctors(request):
         context = {
             'doctors': Doctors.objects.all().order_by('specialty'),
             'specialty': Specialty.objects.all().order_by('id'),
-            'btn_state': 'Выйти',
-            'url_state': reverse('registration:user_logout'),
+            'btn_title': 'Выйти',
+            'url_btn': reverse('registration:user_logout'),
             'title_page': 'Специалисты клиники',
         }
         return render(request, 'registration_app/doctors.html', context)
@@ -116,15 +116,15 @@ def user_login(request):
             context['error'] = 'Неверный логин и/или пароль.'
             user_form = UserForm()
             context['user_form'] = user_form
-            context['btn_state'] = 'Регистрация'
-            context['url_state'] = reverse('registration:user_register')
+            context['btn_title'] = 'Регистрация'
+            context['url_btn'] = reverse('registration:user_register')
             context['title_page'] = 'Авторизация'
             return render(request, 'registration_app/login.html', context)
     else:
         user_form = UserForm()
         context['user_form'] = user_form
-        context['btn_state'] = 'Регистрация'
-        context['url_state'] = reverse('registration:user_register')
+        context['btn_title'] = 'Регистрация'
+        context['url_btn'] = reverse('registration:user_register')
         context['title_page'] = 'Авторизация'
         return render(request, 'registration_app/login.html', context)
 
@@ -143,15 +143,15 @@ def user_register(request):
             context['error'] = 'Пользователь с таким логином уже существует.'
             user_form = UserForm()
             context['user_form'] = user_form
-            context['btn_state'] = 'Авторизация'
-            context['url_state'] = reverse('registration:user_login')
+            context['btn_title'] = 'Авторизация'
+            context['url_btn'] = reverse('registration:user_login')
             context['title_page'] = 'Регистрация'
             return render(request, 'registration_app/register.html', context)
     else:
         user_form = UserForm()
         context['user_form'] = user_form
-        context['btn_state'] = 'Авторизация'
-        context['url_state'] = reverse('registration:user_login')
+        context['btn_title'] = 'Авторизация'
+        context['url_btn'] = reverse('registration:user_login')
         context['title_page'] = 'Регистрация'
         return render(request, 'registration_app/register.html', context)
 
